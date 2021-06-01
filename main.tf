@@ -17,6 +17,7 @@ data "azurerm_resource_group" "rgrp" {
 }
 
 resource "azurerm_resource_group" "rg" {
+  #ts:skip=accurics.azure.NS.272 RSG lock should be skipped for now.
   count    = var.create_resource_group ? 1 : 0
   name     = lower(var.resource_group_name)
   location = var.location
@@ -92,9 +93,16 @@ resource "azurerm_application_gateway" "main" {
     backend_http_settings_name = "defaulthttpsetting"
   }
 
+  waf_configuration {
+    enabled          = var.waf_enabled
+    firewall_mode    = var.waf_firewall_mode
+    rule_set_type    = "OWASP"
+    rule_set_version = "3.1"
+  }
+
   lifecycle {
     ignore_changes = [
-      backend_address_pool, backend_http_settings, http_listener, probe, request_routing_rule, tags
+      backend_address_pool, backend_http_settings, http_listener, probe, request_routing_rule, waf_configuration, tags
     ]
   }
 
