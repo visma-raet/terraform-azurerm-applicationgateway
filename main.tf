@@ -17,7 +17,7 @@ data "azurerm_resource_group" "rgrp" {
 }
 
 resource "azurerm_resource_group" "rg" {
-  #ts:skip=accurics.azure.NS.272 RSG lock should be skipped for now.
+  #ts:skip=AC_AZURE_0389 RSG lock should be skipped for now.
   count    = var.create_resource_group ? 1 : 0
   name     = lower(var.resource_group_name)
   location = var.location
@@ -94,7 +94,7 @@ resource "azurerm_application_gateway" "main" {
   }
 
   dynamic "waf_configuration" {
-    #ts:skip=accurics.azure.NS.147 Enabling dynamically
+    #ts:skip=AC_AZURE_0189 Enabling dynamically
     for_each = (var.waf_enabled && contains(["WAF", "WAF_v2"], var.sku)) ? [true] : []
     content {
       enabled          = var.waf_enabled
